@@ -136,9 +136,10 @@ int saida(char **querys, char *seq, int n, int nu_proc, FILE *out, int genoma, i
 		if(nu_proc != 1){
 			//receber aqui
 			MPI_Recv(&tempo_logico_msg,1,MPI_INT,nu_proc-1,3,MPI_COMM_WORLD,&status);
+			printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", nu_proc, nu_proc-1, tempo_logico, tempo_logico_msg);
 			tempo_logico = max(tempo_logico, tempo_logico_msg);
 			MPI_Recv(&sinal,1,MPI_INT,nu_proc-1,8,MPI_COMM_WORLD,&status);
-			printf("Eu, processo %d, recebi %d no tempo lógico.\n", nu_proc, tempo_logico);
+			
 			if(sinal != -1){
 				result = 1;
 			}
