@@ -114,8 +114,8 @@ int main(int argc, char** argv) {
 		char **Matriz_cod;
 		//receber aqui
 		MPI_Recv(&tempo_logico_msg, 1, MPI_INT, 0,3, MPI_COMM_WORLD, &status);
+		printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, 0, tempo_logico, tempo_logico_msg);
 		tempo_logico = max(tempo_logico, tempo_logico_msg);
-		printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
 		MPI_Recv(tamanho_cod,2,MPI_INT,0,0,MPI_COMM_WORLD,&status);
 		Matriz_cod=alocarMatriz(tamanho_cod[0],tamanho_cod[1],arq_cod);
 		
@@ -129,9 +129,9 @@ int main(int argc, char** argv) {
 			// recebendo parametros do rank=0
 				//receber aqui
 				MPI_Recv(&tempo_logico_msg,1,MPI_INT,0,3,MPI_COMM_WORLD,&status);
+				printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, 0, tempo_logico, tempo_logico_msg);
 				tempo_logico = max(tempo_logico, tempo_logico_msg);
 				MPI_Recv(&sinal,1,MPI_INT,0,1,MPI_COMM_WORLD,&status);
-				printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
 
 				tempo_logico++;
 				MPI_Send(&tempo_logico, 1, MPI_INT,my_rank+1,3,MPI_COMM_WORLD);
@@ -140,9 +140,10 @@ int main(int argc, char** argv) {
 				if(sinal==1){
 					//receber aqui
 					MPI_Recv(&tempo_logico_msg,1,MPI_INT,0,3,MPI_COMM_WORLD,&status);
+					printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, 0, tempo_logico, tempo_logico_msg);
 					tempo_logico = max(tempo_logico, tempo_logico_msg);
 					MPI_Recv(tamanho_seq,3,MPI_INT,0,0,MPI_COMM_WORLD,&status);
-					printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
+				
 					char c[tamanho_seq[1]+1];
 					
 					// gera o seq
@@ -182,9 +183,10 @@ int main(int argc, char** argv) {
 			while(sinal==1){
 				//receber aqui
 				MPI_Recv(&tempo_logico_msg,1,MPI_INT,my_rank-1,3,MPI_COMM_WORLD,&status);
+				printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, my_rank-1, tempo_logico, tempo_logico_msg);
 				tempo_logico = max(tempo_logico, tempo_logico_msg);
 				MPI_Recv(&sinal,1,MPI_INT,my_rank-1,1,MPI_COMM_WORLD,&status);
-				printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
+				
 
 				if(my_rank!=(np-1)){
 					//enviar aqui
@@ -196,9 +198,10 @@ int main(int argc, char** argv) {
 					// recebendo parametros do rank=0
 					//receber aqui
 					MPI_Recv(&tempo_logico_msg,1,MPI_INT,0,3,MPI_COMM_WORLD,&status);
+					printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, 0, tempo_logico, tempo_logico_msg);
 					tempo_logico = max(tempo_logico, tempo_logico_msg);
 					MPI_Recv(tamanho_seq,3,MPI_INT,0,0,MPI_COMM_WORLD,&status);
-					printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
+					
 					
 					
 					char c[tamanho_seq[1]+1+tamanho_cod[1]];
@@ -206,9 +209,10 @@ int main(int argc, char** argv) {
 					// recebendo final do seq do processo anterios
 					//receber aqui
 					MPI_Recv(&tempo_logico_msg,1,MPI_INT,my_rank-1,3,MPI_COMM_WORLD,&status);
+					printf("Processo: %d | Remetente: %d | Tempo: %d | Tempo recebido: %d\n", my_rank, my_rank-1, tempo_logico, tempo_logico_msg);
 					tempo_logico = max(tempo_logico, tempo_logico_msg);
 					MPI_Recv(c,tamanho_cod[1],MPI_INT,my_rank-1,0,MPI_COMM_WORLD,&status);
-					printf("Eu, processo %d, recebi %d no tempo lógico.\n", my_rank, tempo_logico);
+					
 					
 					// gera o seq
 					pega_seq(tamanho_seq[0], tamanho_seq[1],arq_seq,&c[tamanho_cod[1]] );
